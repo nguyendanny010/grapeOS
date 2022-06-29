@@ -4,7 +4,7 @@
 #include "../memory/memory.h"
 #include "../io/io.h"
 
-struct idt_desc idt_descriptors[PEACHOS_TOTAL_INTERRUPTS];
+struct idt_desc idt_descriptors[GRAPEOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
 
 extern void idt_load(struct idtr_desc * ptr);

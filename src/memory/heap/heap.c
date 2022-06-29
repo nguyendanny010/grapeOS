@@ -43,10 +43,105 @@ out:
     return res;
 }
 
-void * heap_malloc(size_t size){
-    return 0;
+static uint32_t heap_align_value_to_upper(uint32_t val){
+    if(val % GRAPEOS_HEAP_BLOCK_SIZE == 0) return val;
+
+    val = (val - (val % GRAPEOS_HEAP_BLOCK_SIZE));
+    val += GRAPEOS_HEAP_BLOCK_SIZE;
+    return val;
 }
 
-void heap_free(void * ptr){
-    return 0;
+static int heap_get_entry_type(HEAP_BLOCK_TABLE_ENTRY entry){
+    return entry & 0x0f;
+}
+
+/*
+ * Returns the starting block in the heap where total_blocks are free
+ */
+int heap_get_start_block(struct heap * heap, uint32_t total_blocks){
+    struct heap_table * table = heap->table;
+    int current_block = 0;
+    int starting_block = -1;
+
+    for(size_t i = 0; i < table->total; i++){
+        // If this entry isn't free
+        if(heap_get_entry_type(table->entries[i]) != HEAP_BLOCK_TABLE_ENTRY_FREE){
+            current_block = 0;
+            starting_block = -1;
+            continue;
+        }
+        // If this is the first block
+        if(starting_block == -1) starting_block = i;
+        current_block++;
+        // We have enough space
+        if(current_block == total_blocks) break;
+    }
+
+    if(starting_block == -1) return -ENOMEM;
+
+    return starting_block;
+}
+
+void * heap_block_to_address(struct heap * heap, int block){
+    return heap->saddr + (block * GRAPEOS_HEAP_BLOCK_SIZE);
+}
+
+void heap_mark_blocks_taken(struct heap * heap, int start_block, int total_blocks){
+    int end_block = (start_block + total_blocks) - 1;
+
+    HEAP_BLOCK_TABLE_ENTRY entry = HEAP_BLOCK_TABLE_ENTRY_TAKEN || HEAP_BLOCK_IS_FIRST;
+
+    if(total_blocks > 1) entry |= HEAP_BLOCK_HAS_NEXT;
+
+    for(int i = start_block; i <= end_block; i++){
+        heap->table->entries[i] = entry;
+        entry = HEAP_BLOCK_TABLE_ENTRY_TAKEN;
+        if(i != end_block - 1) entry |= HEAP_BLOCK_HAS_NEXT;
+    }
+}
+
+void * heap_malloc_blocks(struct heap * heap, uint32_t total_blocks){
+    void * address = 0;
+    int start_block = heap_get_start_block(heap, total_blocks);
+
+    if(start_block < 0) goto out;
+
+    address = heap_block_to_address(heap, start_block);
+
+    // Mark the blocks as taken
+    heap_mark_blocks_taken(heap, start_block, total_blocks);
+
+out:
+    return address;
+}
+
+
+void heap_mark_blocks_free(struct heap * heap, int starting_block){
+    struct heap_table * table = heap->table;
+
+    for(int i = starting_block; i < (int)table->total; i++){
+        HEAP_BLOCK_TABLE_ENTRY entry = table->entries[i];
+        table->entries[i] = HEAP_BLOCK_TABLE_ENTRY_FREE;
+        
+        if(!(entry & HEAP_BLOCK_HAS_NEXT)) break;
+    }
+}
+
+/*
+ * Returns the corresponding block number of the address
+ * address - heap->saddress gives the offset
+ * division by block size gives the block number
+ */
+int heap_address_to_block(struct heap * heap, void * address){
+    return ((int)(address - heap->saddr)) / GRAPEOS_HEAP_BLOCK_SIZE;
+}
+
+void * heap_malloc(struct heap * heap, size_t size){
+    size_t aligned_size = heap_align_value_to_upper(size);
+    uint32_t total_blocks = aligned_size / GRAPEOS_HEAP_BLOCK_SIZE;
+    return heap_malloc_blocks(heap, total_blocks);
+}
+
+void heap_free(struct heap * heap,void * ptr){
+    heap_mark_blocks_free(heap, heap_address_to_block(heap, ptr));
 }
