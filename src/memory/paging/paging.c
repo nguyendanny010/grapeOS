@@ -1,6 +1,8 @@
 #include "paging.h"
 #include "memory/heap/kheap.h"
 
+void paging_load_directory(uint32_t * directory);
+static uint32_t * current_directory = 0;
 /*
  * Create a page directory with page tables.
  */
@@ -26,4 +28,13 @@ struct paging_4gb_chunk * paging_new_4gb(uint8_t flags){
     chunk_4gb->directory_entry = directory;
 
     return chunk_4gb;
+}
+
+void paging_switch(uint32_t * directory){
+    paging_load_directory(directory);
+    current_directory = directory;
+}
+
+uint32_t * paging_4gb_chunk_get_directory(struct paging_4gb_chunk * chunk){
+    return chunk->directory_entry;
 }
