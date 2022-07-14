@@ -23,9 +23,7 @@ struct heap{
     void * saddr;
 };
 
-static int heap_validate_table(void * ptr, void * end, struct heap_table* table);
 int heap_create(struct heap * heap, void * ptr, void * end, struct heap_table * table);
-static uint32_t heap_align_value_to_upper(uint32_t val){
 int heap_get_start_block(struct heap * heap, uint32_t total_blocks);
 void * heap_malloc_blocks(struct heap * heap, uint32_t total_blocks);
 void * heap_block_to_address(struct heap * heap, int block);
