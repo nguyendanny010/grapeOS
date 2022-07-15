@@ -66,8 +66,8 @@ static int heap_get_entry_type(HEAP_BLOCK_TABLE_ENTRY entry){
 
 /*
  * Returns the starting block in the heap where total_blocks are free
- * @param *heap the current heap.
- * @param total_blocks the total amount of blocks which must be available.
+ * @param *heap         The current heap.
+ * @param total_blocks  The total amount of blocks which must be available.
  */
 int heap_get_start_block(struct heap * heap, uint32_t total_blocks){
     struct heap_table * table = heap->table;
@@ -95,8 +95,8 @@ int heap_get_start_block(struct heap * heap, uint32_t total_blocks){
 
 /*
  * Returns the address of the corresponding block
- * @param *heap the current heap.
- * @param block the block whose corresponding address is returned.
+ * @param *heap     The current heap.
+ * @param block     The block whose corresponding address is returned.
  */
 void * heap_block_to_address(struct heap * heap, int block){
     return heap->saddr + (block * GRAPEOS_HEAP_BLOCK_SIZE);
@@ -104,9 +104,9 @@ void * heap_block_to_address(struct heap * heap, int block){
 
 /*
  * Marks total_blocks starting from start_block as taken within the heap.
- * @param *heap the current heap.
- * @param start_block the block to start from.
- * @param total_blocks total amount of blocks to mark as taken.
+ * @param *heap         The current heap.
+ * @param start_block   The block to start from.
+ * @param total_blocks  Total amount of blocks to mark as taken.
  */
 void heap_mark_blocks_taken(struct heap * heap, int start_block, int total_blocks){
     int end_block = (start_block + total_blocks) - 1;
@@ -125,8 +125,8 @@ void heap_mark_blocks_taken(struct heap * heap, int start_block, int total_block
 /*
  * Retrieves the starting block of total_blocks then marks the blocks starting
  * from that address as taken. 
- * @param *heap the current heap.
- * @param total_blocks total amount of blocks in memory to allocate.
+ * @param *heap         The current heap.
+ * @param total_blocks  Total amount of blocks in memory to allocate.
  */
 void * heap_malloc_blocks(struct heap * heap, uint32_t total_blocks){
     void * address = 0;
@@ -145,8 +145,8 @@ out:
 
 /*
  * Marks blocks from starting_block as free.
- * @param *heap the current heap.
- * @param starting_block the block to start from.
+ * @param *heap             The current heap.
+ * @param starting_block    The block to start from.
  */
 void heap_mark_blocks_free(struct heap * heap, int starting_block){
     struct heap_table * table = heap->table;
@@ -161,8 +161,8 @@ void heap_mark_blocks_free(struct heap * heap, int starting_block){
 
 /*
  * Returns the corresponding block number of the address
- * @param *heap the current heap.
- * @param *address the address whose block to return.
+ * @param *heap     The current heap.
+ * @param *address  The address whose block to return.
  */
 int heap_address_to_block(struct heap * heap, void * address){
     return ((int)(address - heap->saddr)) / GRAPEOS_HEAP_BLOCK_SIZE;
@@ -170,8 +170,8 @@ int heap_address_to_block(struct heap * heap, void * address){
 
 /*
  * Marks size amount of blocks as taken within the heap.
- * @param *heap the address of the heap.
- * @param size block size.
+ * @param *heap     The address of the heap.
+ * @param size      Block size.
  */
 void * heap_malloc(struct heap * heap, size_t size){
     size_t aligned_size = heap_align_value_to_upper(size);
@@ -181,8 +181,8 @@ void * heap_malloc(struct heap * heap, size_t size){
 
 /*
  * Frees the designated ptr address from the heap.
- * @param *heap the address of the heap where ptr should be freed from.
- * @param ptr the address to be freed.
+ * @param *heap     The address of the heap where ptr should be freed from.
+ * @param ptr       The address to be freed.
  */
 void heap_free(struct heap * heap,void * ptr){
     heap_mark_blocks_free(heap, heap_address_to_block(heap, ptr));

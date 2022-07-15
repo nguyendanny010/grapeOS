@@ -24,7 +24,7 @@ void kheap_init(){
 
 /*
  * Allocates memory within the kernel.
- * @param size the size to allocate.
+ * @param   Size the size to allocate.
  */
 void * kmalloc(size_t size){
     return heap_malloc(&kernel_heap, size);
@@ -32,8 +32,8 @@ void * kmalloc(size_t size){
 
 /*
  * Allocates a memory address of size size then sets the address to 0x00.
- * @param size the size to allocate
- * @return a pointer to the allocated memory address
+ * @param   Size the size to allocate
+ * @return  A pointer to the allocated memory address
  * */
 void * kzalloc(size_t size){
     void * ptr = kmalloc(size);
@@ -44,7 +44,7 @@ void * kzalloc(size_t size){
 
 /*
  * Frees the memory address
- * @param ptr the memory address to free
+ * @param   Ptr the memory address to free
  */
 void kfree(void * ptr){
     heap_free(&kernel_heap, ptr);
