@@ -30,12 +30,22 @@ void * kmalloc(size_t size){
     return heap_malloc(&kernel_heap, size);
 }
 
+/*
+ * Allocates a memory address of size size then sets the address to 0x00.
+ * @param size the size to allocate
+ * @return a pointer to the allocated memory address
+ * */
 void * kzalloc(size_t size){
     void * ptr = kmalloc(size);
     if(!ptr) return 0;
     memset(ptr, 0x00, size);
     return ptr;
 }
+
+/*
+ * Frees the memory address
+ * @param ptr the memory address to free
+ */
 void kfree(void * ptr){
     heap_free(&kernel_heap, ptr);
 }
