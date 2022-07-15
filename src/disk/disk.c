@@ -1,4 +1,10 @@
+#include "disk.h"
 #include "../io/io.h"
+#include "../memory/memory.h"
+#include "../status.h"
+#include "../config.h"
+
+struct disk disk;
 /**
  * @brief 
  * 
@@ -31,4 +37,44 @@ int disk_read_sector(int lba, int total, void* buffer){
         }
     }
     return 0;
+}
+
+/**
+ * @brief 
+ * Responsible for searching for disks and initializng them
+ */
+void disk_search_and_init(){
+    memset(&disk, 0, sizeof(disk));
+    disk.type = GRAPEOS_DISK_TYPE_REAL;
+    disk.sector_size = GRAPEOS_SECTOR_SIZE;
+}
+
+/**
+ * @brief 
+ * Gets the disk based on index
+ * @param index If index isn't 0 then it must be an invalid disk
+ * @return struct disk* 
+ */
+struct disk* disk_get(int index){
+    if(index != 0)
+        return 0;
+
+    return &disk;
+}
+
+/**
+ * @brief 
+ * 
+ * @param idisk 
+ * @param lba 
+ * @param total 
+ * @param buf 
+ * @return int 
+ */
+int disk_read_block(struct disk* idisk, unsigned int lba, int total, void* buf){
+    if(idisk != &disk){
+        return -EIO;
+    }
+
+    return disk_read_sector(lba, total, buf);
 }
