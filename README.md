@@ -114,6 +114,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
+* Ubuntu
+  This project was made tested and run on Ubuntu linux
 * npm
   ```sh
   npm install npm@latest -g
