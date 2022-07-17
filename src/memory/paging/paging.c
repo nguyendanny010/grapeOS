@@ -2,6 +2,7 @@
 #include "../heap/kheap.h"
 #include "../../status.h"
 
+
 void paging_load_directory(uint32_t * directory);
 static uint32_t * current_directory = 0;
 

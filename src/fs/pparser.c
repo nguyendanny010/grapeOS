@@ -25,15 +25,6 @@
 static int pathparser_path_valid_format(const char *filename)
 {
     int len = strnlen(filename, GRAPEOS_MAX_PATH);
-    if (memcmp((void *)&filename[1], ":/", 2) != 0)
-    {
-        print("invalid");
-    }
-    /* DEBUGGING STATEMENT
-    if(len < 3){
-        print("length less than 3");
-    }
-    */
     return (len >= 3 && isdigit(filename[0]) && memcmp((void *)&filename[1], ":/", 2) == 0);
 }
 
