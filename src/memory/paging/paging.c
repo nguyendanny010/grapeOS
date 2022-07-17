@@ -5,7 +5,7 @@
 void paging_load_directory(uint32_t * directory);
 static uint32_t * current_directory = 0;
 
-/*
+/**
  * Create a page directory with page tables.
  */
 struct paging_4gb_chunk * paging_new_4gb(uint8_t flags){
@@ -38,7 +38,7 @@ void paging_switch(uint32_t * directory){
     current_directory = directory;
 }
 
-/*
+/**
  * Returns the chunk's page table directory.
  * @param *chunk    The address of the chunk.
  * @return Chunk's page table directory.
@@ -51,7 +51,7 @@ bool paging_is_aligned(void * addr){
     return ((uint32_t)addr % PAGING_PAGE_SIZE) == 0;
 }
 
-/*
+/**
  * Sets the index of directory_index_out and table_index_out based on the passed in
  * virtual address.
  * @return 0 on success. -EINVARG on page unalignment.
@@ -69,7 +69,7 @@ out:
     return res;
 }
 
-/*
+/**
  * Sets the page table entry to val
  * @param *directory    The current page table directory
  * @param *virt         The virtual address to map
