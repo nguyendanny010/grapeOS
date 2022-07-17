@@ -1,6 +1,7 @@
 #ifndef DISK_H
 #define DISK_H
 
+#include "../fs/file.h"
 
 typedef unsigned int GRAPEOS_DISK_TYPE;
 
@@ -14,6 +15,7 @@ typedef unsigned int GRAPEOS_DISK_TYPE;
 struct disk{
     GRAPEOS_DISK_TYPE type;
     int sector_size;
+    struct filesystem* filesystem;
 };
 
 void disk_search_and_init();

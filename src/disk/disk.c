@@ -1,6 +1,7 @@
 #include "disk.h"
 #include "../io/io.h"
 #include "../memory/memory.h"
+#include "../fs/file.h"
 #include "../status.h"
 #include "../config.h"
 
@@ -47,6 +48,7 @@ void disk_search_and_init(){
     memset(&disk, 0, sizeof(disk));
     disk.type = GRAPEOS_DISK_TYPE_REAL;
     disk.sector_size = GRAPEOS_SECTOR_SIZE;
+    disk.filesystem = fs_resolve(&disk);
 }
 
 /**
