@@ -3,7 +3,9 @@
 #include "io/io.h"
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
+#include "string/string.h"
 #include "disk/disk.h"
+#include "fs/pparser.h"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -64,15 +66,6 @@ void terminal_initalize(){
 }
 
 /*
- * Returns the length of the string.
- */
-size_t strlen(const char* str){
-    size_t len = 0;
-    while(str[len]) len++;
-    return len;
-}
-
-/*
  * Prints a string.
  */
 void print(const char* str){
@@ -109,4 +102,9 @@ void kernel_main(){
 
     // Enable the system interrupts
     enable_interrupts();
+
+    struct path_root* root_path = pathparser_parse("0:/bin/shell.exe", NULL);
+    if(root_path){
+        
+    }
 }
