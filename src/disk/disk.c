@@ -7,7 +7,7 @@
 struct disk disk;
 /**
  * @brief 
- * 
+ * Reads one sector from the disk
  * 
  * @param lba       The logical block address to read from
  * @param total     The total number of blocks to read from lba
