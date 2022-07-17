@@ -12,6 +12,16 @@
  * pointer points to. The pointer can't be modified because the pointer
  * itself is passed by value. To modify the pointer it needs to be passed
  * by reference. This is done by passing a pointer to that pointer.
+ * 
+ * EXAMPLE
+ * Passing a pointer to a character
+ * You can modify the characters within the string but you can't
+ * modify where the pointer to the character points after the function
+ * has finished executing because you received a copy of the pointer.
+ * The original pointer will still point to the first character.
+ * To modify and remember its 'place' you must pass a pointer to that
+ * pointer.
+ * 
  */
 
 /**
